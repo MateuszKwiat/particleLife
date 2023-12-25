@@ -9,6 +9,7 @@ int main()
 
     float circleRadius = 20.f;
     int circleSegments = 100;
+    int halfOfCircleRadius = static_cast<int>(circleRadius / 2);
 
     sf::CircleShape shape(circleRadius, circleSegments);
     shape.setFillColor(sf::Color(204, 77, 5));
@@ -29,6 +30,17 @@ int main()
 
         ImGui::Begin("Settings");
         ImGui::End();
+
+        // screen wrapping
+        if (shape.getPosition().x > window.getSize().x + halfOfCircleRadius)
+            shape.setPosition(-halfOfCircleRadius, shape.getPosition().y);
+        else if (shape.getPosition().x < -halfOfCircleRadius)
+            shape.setPosition(window.getSize().x + halfOfCircleRadius, shape.getPosition().y);
+        if (shape.getPosition().y > window.getSize().y + halfOfCircleRadius)
+            shape.setPosition(shape.getPosition().x, -halfOfCircleRadius);
+        else if (shape.getPosition().y < -halfOfCircleRadius)
+            shape.setPosition(shape.getPosition().x, window.getSize().y + halfOfCircleRadius);
+
 
         // particle movement
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
