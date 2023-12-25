@@ -1,20 +1,81 @@
-// particleLife.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
-#include <iostream>
+#include "imgui/imgui.h"
+#include "imgui/imgui-SFML.h"
+#include <SFML/Graphics.hpp>
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    sf::RenderWindow window(sf::VideoMode(800, 800), "SFML works!");
+    ImGui::SFML::Init(window);
+
+    bool circleExists = true;
+    bool temp = true;
+    float circleRadius = 200.f;
+    int circleSegments = 100;
+    sf::CircleShape shape(circleRadius, circleSegments);
+    sf::CircleShape shape1(circleRadius, 3);
+    sf::CircleShape shape2(circleRadius, 4);
+    shape.setFillColor(sf::Color(204, 77, 5));
+    shape.setOrigin(circleRadius, circleRadius);
+    shape.setPosition(400, 400);
+
+    shape1.setFillColor(sf::Color(204, 77, 5));
+    shape1.setOrigin(circleRadius, circleRadius);
+    shape1.setPosition(400, 400);
+
+    shape2.setFillColor(sf::Color(204, 77, 5));
+    shape2.setOrigin(circleRadius, circleRadius);
+    shape2.setPosition(400, 400);
+
+    sf::Clock deltaClock;
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            ImGui::SFML::ProcessEvent(event);
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+        ImGui::SFML::Update(window, deltaClock.restart());
+
+        ImGui::Begin("Settings");
+
+        static int e = 0;
+        ImGui::RadioButton("Circle", &e, 0);
+        ImGui::RadioButton("Triangle", &e, 1);
+        ImGui::RadioButton("Square", &e, 2);
+        ImGui::SliderFloat("Radius", &circleRadius, 100.f, 300.f);
+        ImGui::SliderInt("Sides", &circleSegments, 3, 150);
+        ImGui::End();
+
+        shape.setRadius(circleRadius);
+        shape.setOrigin(circleRadius, circleRadius);
+        shape.setPointCount(circleSegments);
+
+        shape1.setRadius(circleRadius);
+        shape1.setOrigin(circleRadius, circleRadius);
+
+        shape2.setRadius(circleRadius);
+        shape2.setOrigin(circleRadius, circleRadius);
+
+        window.clear(sf::Color(18, 33, 43));
+        if (circleExists) {
+
+            if (e == 0) {
+                window.draw(shape);
+            }
+            else if (e == 1) {
+                window.draw(shape1);
+            }
+            else {
+                window.draw(shape2);
+            }
+        }
+
+        ImGui::SFML::Render(window);
+        window.display();
+    }
+
+    ImGui::SFML::Shutdown();
+    return 0;
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
