@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <cmath>
+#include <vector>
 
 // radius between two particles on opposite sides of screen
 // solution (plane size 1920x1080):
@@ -41,18 +42,32 @@ public:
     sf::CircleShape getShape() {
         return shape;
     }
+
+    float getRadius() {
+        return radius;
+    }
 };
 
 float calcDistance(float xDistance, float yDistance) {
     return std::sqrt(pow(xDistance, 2) + pow(yDistance, 2));
 }
 
-bool inRadius(sf::CircleShape& circ1, sf::CircleShape circ2) {
-    float xDist = circ1.getPosition().x - circ2.getPosition().x;
-    float yDist = circ1.getPosition().y - circ2.getPosition().y;
+bool inRadius(sf::CircleShape&& circ1, sf::CircleShape&& circ2, sf::Window* window) {
+    float maxRadius = 200.f;
+    float xDist = abs(circ1.getPosition().x - circ2.getPosition().x);
+    float yDist = abs(circ1.getPosition().y - circ2.getPosition().y);
     float distance = calcDistance(xDist, yDist);
 
-    return distance <= 500.f ? true : false;
+    if (distance <= maxRadius)
+        return true;
+    else if (xDist > yDist) {
+        return (distance >= (window->getSize().x - maxRadius)) && distance <= window->getSize().x ? true : false;
+    }
+    else if (xDist < yDist) {
+        return (distance >= (window->getSize().y - maxRadius)) && distance <= window->getSize().y ? true : false;
+    }
+    else
+        return false;
 }
 
 int main()
@@ -60,17 +75,14 @@ int main()
     sf::RenderWindow window(sf::VideoMode(1500, 900), "SFML works!");
     ImGui::SFML::Init(window);
 
-    float circleRadius = 20.f;
-    float circleMoveValue = 1.f;
-    int circleSegments = 100;
-    int halfOfCircleRadius = static_cast<int>(circleRadius / 2);
+    std::vector<Particle> particlesVec;
+    particlesVec.push_back(Particle());
+    particlesVec.push_back(Particle());
 
-    sf::CircleShape shape(circleRadius, circleSegments);
-    shape.setFillColor(sf::Color(204, 77, 5));
-    shape.setOrigin(circleRadius, circleRadius);
-    shape.setPosition(400, 400);
+    float circleMoveValue = .75f;
+    float halfOfCircleRadius = particlesVec[0].getRadius() / 2;
 
-    Particle particle;
+    int particleChoice = 0;
 
     sf::Clock deltaClock;
     while (window.isOpen())
@@ -86,54 +98,54 @@ int main()
 
         ImGui::Begin("Settings");
         ImGui::SliderFloat("move value", &circleMoveValue, 0.f, 10.f);
+        ImGui::RadioButton("particle 1", &particleChoice, 0);
+        ImGui::RadioButton("particle 2", &particleChoice, 1);
         ImGui::End();
 
         // screen wrapping
-        if (shape.getPosition().x > window.getSize().x + halfOfCircleRadius)
-            shape.setPosition(-halfOfCircleRadius, shape.getPosition().y);
-        else if (shape.getPosition().x < -halfOfCircleRadius)
-            shape.setPosition(window.getSize().x + halfOfCircleRadius, shape.getPosition().y);
-        if (shape.getPosition().y > window.getSize().y + halfOfCircleRadius)
-            shape.setPosition(shape.getPosition().x, -halfOfCircleRadius);
-        else if (shape.getPosition().y < -halfOfCircleRadius)
-            shape.setPosition(shape.getPosition().x, window.getSize().y + halfOfCircleRadius);
+        for (auto& x : particlesVec) {
+            if (x.getPosition().x > window.getSize().x + halfOfCircleRadius)
+                x.setPosition(-halfOfCircleRadius, x.getPosition().y);
+            else if (x.getPosition().x < -halfOfCircleRadius)
+                x.setPosition(window.getSize().x + halfOfCircleRadius, x.getPosition().y);
+            if (x.getPosition().y > window.getSize().y + halfOfCircleRadius)
+                x.setPosition(x.getPosition().x, -halfOfCircleRadius);
+            else if (x.getPosition().y < -halfOfCircleRadius)
+                x.setPosition(x.getPosition().x, window.getSize().y + halfOfCircleRadius);
 
-        if (particle.getPosition().x > window.getSize().x)
-            particle.setPosition(0, particle.getPosition().y);
-        else if (particle.getPosition().x < 0)
-            particle.setPosition(window.getSize().x, particle.getPosition().y);
-        if (particle.getPosition().y > window.getSize().y)
-            particle.setPosition(particle.getPosition().x, 0);
-        else if (particle.getPosition().y < 0)
-            particle.setPosition(particle.getPosition().x, window.getSize().y);
-
+        }
 
         // particle movement
+        int particleIndex = particleChoice ? 0 : 1;
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
-            shape.setPosition(shape.getPosition().x - circleMoveValue, shape.getPosition().y);
+            particlesVec[particleIndex].setPosition(particlesVec[particleIndex].getPosition().x - circleMoveValue,
+                particlesVec[particleIndex].getPosition().y);
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
-            shape.setPosition(shape.getPosition().x + circleMoveValue, shape.getPosition().y);
+            particlesVec[particleIndex].setPosition(particlesVec[particleIndex].getPosition().x + circleMoveValue,
+                particlesVec[particleIndex].getPosition().y);
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
-            shape.setPosition(shape.getPosition().x, shape.getPosition().y - circleMoveValue);
+            particlesVec[particleIndex].setPosition(particlesVec[particleIndex].getPosition().x, 
+                particlesVec[particleIndex].getPosition().y - circleMoveValue);
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
-            shape.setPosition(shape.getPosition().x, shape.getPosition().y + circleMoveValue);
+            particlesVec[particleIndex].setPosition(particlesVec[particleIndex].getPosition().x,
+                particlesVec[particleIndex].getPosition().y + circleMoveValue);
 
-        particle.setPosition(particle.getPosition().x + .05f, particle.getPosition().y + .05f);
         
-        bool isInRadius = inRadius(shape, particle.getShape());
-
+        bool isInRadius = inRadius(particlesVec[0].getShape(), particlesVec[1].getShape(), &window);
+        
         if (isInRadius) {
-            shape.setFillColor(sf::Color::Red);
-            particle.setFillColor(sf::Color::Red);
+            for (auto& x : particlesVec)
+                x.setFillColor(sf::Color::Green);
         }
         else if (!isInRadius) {
-            shape.setFillColor(sf::Color(204, 77, 5));
-            particle.setFillColor(sf::Color(204, 77, 5));
+            for (auto& x : particlesVec)
+                x.setFillColor(sf::Color(204, 77, 5));
         }
 
         window.clear(sf::Color(18, 33, 43));
-        window.draw(shape);
-        window.draw(particle.getShape());
+        for (auto x : particlesVec)
+            window.draw(x.getShape());
         ImGui::SFML::Render(window);
         window.display();
     }
