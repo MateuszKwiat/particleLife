@@ -16,19 +16,28 @@
 
 class Particle {
 private:
-    float radius;
+    float radiusValue;
     sf::CircleShape shape;
+    sf::CircleShape radiusOutline;
 
 public:
-    Particle() : shape(10.f) {
-        radius = 10.f;
+    Particle() : shape(10.f), radiusOutline(200.f) {
+        radiusValue = 10.f;
         shape.setFillColor(sf::Color(204, 77, 5));
-        shape.setOrigin(radius, radius);
+        shape.setOrigin(radiusValue, radiusValue);
         shape.setPosition(200, 200);
+
+
+        radiusOutline.setFillColor(sf::Color(255, 255, 255, 256));
+        radiusOutline.setOrigin(200.f, 200.f);
+        radiusOutline.setPosition(200, 200);
+        radiusOutline.setOutlineColor(sf::Color::Red);
+        radiusOutline.setOutlineThickness(2.f);
     }
 
     void setPosition(float x, float y) {
         shape.setPosition(x, y);
+        radiusOutline.setPosition(x, y);
     }
 
     void setFillColor(sf::Color col) {
@@ -43,8 +52,12 @@ public:
         return shape;
     }
 
+    sf::CircleShape getRadiusShape() {
+        return radiusOutline;
+    }
+
     float getRadius() {
-        return radius;
+        return radiusValue;
     }
 };
 
@@ -57,17 +70,17 @@ bool inRadius(sf::CircleShape&& circ1, sf::CircleShape&& circ2, sf::Window* wind
     float xDist = abs(circ1.getPosition().x - circ2.getPosition().x);
     float yDist = abs(circ1.getPosition().y - circ2.getPosition().y);
     float distance = calcDistance(xDist, yDist);
-
-    if (distance <= maxRadius)
-        return true;
-    else if (xDist > yDist) {
-        return (distance >= (window->getSize().x - maxRadius)) && distance <= window->getSize().x ? true : false;
+    
+    if (xDist < maxRadius && yDist < maxRadius)
+        return calcDistance(xDist, yDist) <= maxRadius;
+    
+    if (circ1.getPosition().x < maxRadius && circ2.getPosition().x > window->getSize().x - maxRadius) {
+        xDist = abs(circ1.getPosition().x + window->getSize().x - circ2.getPosition().x);
     }
-    else if (xDist < yDist) {
-        return (distance >= (window->getSize().y - maxRadius)) && distance <= window->getSize().y ? true : false;
+    else if (circ2.getPosition().x < maxRadius && circ1.getPosition().x > window->getSize().x - maxRadius) {
+        xDist = abs(circ2.getPosition().x + window->getSize().x - circ1.getPosition().x);
     }
-    else
-        return false;
+    return calcDistance(xDist, yDist) <= maxRadius;
 }
 
 int main()
@@ -145,7 +158,10 @@ int main()
 
         window.clear(sf::Color(18, 33, 43));
         for (auto x : particlesVec)
+            window.draw(x.getRadiusShape());
+        for (auto x : particlesVec)
             window.draw(x.getShape());
+
         ImGui::SFML::Render(window);
         window.display();
     }
