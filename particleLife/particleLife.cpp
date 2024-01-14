@@ -5,39 +5,23 @@
 #include <cmath>
 #include <vector>
 
-// radius between two particles on opposite sides of screen
-// solution (plane size 1920x1080):
-// if |x1 - x2| < 1 or |x1 - x2| > 1919 and (same for y) -> calculate the forces
-//        ^ case for       ^ case for 
-//        distance in      distance when                |             |     in this case
-//        the middle       one particle is        -->   |.           .|     they should
-//        of screen        on the left and other        |             |     still attract
-//                         on right etc.                |             |     each other
+// for different settings of particles check if particles of type X can get faster (avg of all X)
 
 class Particle {
 private:
     float radiusValue;
     sf::CircleShape shape;
-    sf::CircleShape radiusOutline;
-
+  
 public:
-    Particle() : shape(10.f), radiusOutline(200.f) {
+    Particle() : shape(10.f) {
         radiusValue = 10.f;
         shape.setFillColor(sf::Color(204, 77, 5));
         shape.setOrigin(radiusValue, radiusValue);
         shape.setPosition(200, 200);
-
-
-        radiusOutline.setFillColor(sf::Color(255, 255, 255, 256));
-        radiusOutline.setOrigin(200.f, 200.f);
-        radiusOutline.setPosition(200, 200);
-        radiusOutline.setOutlineColor(sf::Color::Red);
-        radiusOutline.setOutlineThickness(2.f);
     }
 
     void setPosition(float x, float y) {
         shape.setPosition(x, y);
-        radiusOutline.setPosition(x, y);
     }
 
     void setFillColor(sf::Color col) {
@@ -50,10 +34,6 @@ public:
 
     sf::CircleShape getShape() {
         return shape;
-    }
-
-    sf::CircleShape getRadiusShape() {
-        return radiusOutline;
     }
 
     float getRadius() {
@@ -120,9 +100,6 @@ int main()
         ImGui::SFML::Update(window, deltaClock.restart());
 
         ImGui::Begin("Settings");
-        ImGui::SliderFloat("move value", &circleMoveValue, 0.f, 10.f);
-        ImGui::RadioButton("particle 1", &particleChoice, 0);
-        ImGui::RadioButton("particle 2", &particleChoice, 1);
         ImGui::End();
 
         // screen wrapping
@@ -131,29 +108,13 @@ int main()
                 x.setPosition(-halfOfCircleRadius, x.getPosition().y);
             else if (x.getPosition().x < -halfOfCircleRadius)
                 x.setPosition(window.getSize().x + halfOfCircleRadius, x.getPosition().y);
+
             if (x.getPosition().y > window.getSize().y + halfOfCircleRadius)
                 x.setPosition(x.getPosition().x, -halfOfCircleRadius);
             else if (x.getPosition().y < -halfOfCircleRadius)
                 x.setPosition(x.getPosition().x, window.getSize().y + halfOfCircleRadius);
 
         }
-
-        // particle movement
-        int particleIndex = particleChoice ? 0 : 1;
-
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
-            particlesVec[particleIndex].setPosition(particlesVec[particleIndex].getPosition().x - circleMoveValue,
-                particlesVec[particleIndex].getPosition().y);
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
-            particlesVec[particleIndex].setPosition(particlesVec[particleIndex].getPosition().x + circleMoveValue,
-                particlesVec[particleIndex].getPosition().y);
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
-            particlesVec[particleIndex].setPosition(particlesVec[particleIndex].getPosition().x, 
-                particlesVec[particleIndex].getPosition().y - circleMoveValue);
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
-            particlesVec[particleIndex].setPosition(particlesVec[particleIndex].getPosition().x,
-                particlesVec[particleIndex].getPosition().y + circleMoveValue);
-
         
         bool isInRadius = inRadius(particlesVec[0].getShape(), particlesVec[1].getShape(), &window);
         
@@ -167,8 +128,7 @@ int main()
         }
 
         window.clear(sf::Color(18, 33, 43));
-        for (auto x : particlesVec)
-            window.draw(x.getRadiusShape());
+
         for (auto x : particlesVec)
             window.draw(x.getShape());
 
