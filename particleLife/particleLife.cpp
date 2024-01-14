@@ -1,46 +1,14 @@
-#include "imgui/imgui.h"
-#include "imgui/imgui-SFML.h"
-#include <SFML/Graphics.hpp>
-
-#include <cmath>
-#include <vector>
-
+#include "App.h"
 // for different settings of particles check if particles of type X can get faster (avg of all X)
 
-class Particle {
-private:
-    float radiusValue;
-    sf::CircleShape shape;
-  
-public:
-    Particle() : shape(10.f) {
-        radiusValue = 10.f;
-        shape.setFillColor(sf::Color(204, 77, 5));
-        shape.setOrigin(radiusValue, radiusValue);
-        shape.setPosition(200, 200);
-    }
+int main() {
+    App app;
 
-    void setPosition(float x, float y) {
-        shape.setPosition(x, y);
-    }
+    while (app.running())
+        app.render();
+}
 
-    void setFillColor(sf::Color col) {
-        shape.setFillColor(col);
-    }
-
-    sf::Vector2f getPosition() {
-        return shape.getPosition();
-    }
-
-    sf::CircleShape getShape() {
-        return shape;
-    }
-
-    float getRadius() {
-        return radiusValue;
-    }
-};
-
+/*
 float calcDistance(float xDistance, float yDistance) {
     return std::sqrt(pow(xDistance, 2) + pow(yDistance, 2));
 }
@@ -50,10 +18,10 @@ bool inRadius(sf::CircleShape&& circ1, sf::CircleShape&& circ2, sf::Window* wind
     float xDist = abs(circ1.getPosition().x - circ2.getPosition().x);
     float yDist = abs(circ1.getPosition().y - circ2.getPosition().y);
     float distance = calcDistance(xDist, yDist);
-    
+
     if (xDist < maxRadius && yDist < maxRadius)
         return calcDistance(xDist, yDist) <= maxRadius;
-    
+
     //  X AXIS EDGES CASE
     if (circ1.getPosition().x < maxRadius && circ2.getPosition().x > window->getSize().x - maxRadius) {
         xDist = abs(circ1.getPosition().x + window->getSize().x - circ2.getPosition().x);
@@ -115,9 +83,9 @@ int main()
                 x.setPosition(x.getPosition().x, window.getSize().y + halfOfCircleRadius);
 
         }
-        
+
         bool isInRadius = inRadius(particlesVec[0].getShape(), particlesVec[1].getShape(), &window);
-        
+
         if (isInRadius) {
             for (auto& x : particlesVec)
                 x.setFillColor(sf::Color::Green);
@@ -139,3 +107,5 @@ int main()
     ImGui::SFML::Shutdown();
     return 0;
 }
+
+*/

@@ -5,17 +5,18 @@
 #include <SFML/Graphics.hpp>
 
 #include "Particle.h"
+#include "ImGuiController.h"
 
 #include <vector>
 
-class App {
+class App : private ImGuiController {
 private:
 	sf::VideoMode videMode;
 	sf::RenderWindow* window;
 	sf::Event event;
 
 	bool isRunning;
-	std::vector<Particle> particlesVector;
+	std::vector<Particle*> particlesVector;
 
 	void windowUpdateAndDisplay();
 

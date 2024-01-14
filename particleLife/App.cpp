@@ -1,17 +1,29 @@
 #include "App.h"
 
-App::App() : isRunning(true) {
+App::App() : isRunning(true), ImGuiController() {
 	this->videMode = sf::VideoMode(1500, 900);
 	this->window = new sf::RenderWindow(this->videMode, "Particle Life");
 	this->window->setFramerateLimit(60);
+
+	ImGuiController::initialize(*this->window);
+
+	for (int i = 0; i < 10; i++)
+		this->particlesVector.push_back(new Particle());
 }
 
 App::~App() {
+	ImGuiController::~ImGuiController();
 	delete this->window;
 }
 
 void App::windowUpdateAndDisplay() {
 	this->window->clear(sf::Color(18, 33, 43));
+	for (auto x : particlesVector)
+		this->window->draw(x->getShape());
+	
+	ImGuiController::update(*this->window);
+	ImGuiController::render(*this->window);
+	
 	this->window->display();
 }
 
@@ -21,16 +33,20 @@ const bool App::running() const {
 
 void App::pollEvents() {
 	while (this->window->pollEvent(this->event)) {
+		ImGuiController::eventProcessing(this->event);
+
 		switch (this->event.type) {
 		case sf::Event::Closed:
 			this->window->close();
 			this->isRunning = false;
 			break;
+
 		case sf::Event::KeyPressed:
 			if (this->event.key.code == sf::Keyboard::Escape) {
 				this->window->close();
 				this->isRunning = false;
 			}
+
 			break;
 		}
 	}
