@@ -1,14 +1,12 @@
 #include "Particle.h"
 
-void Particle::setFillColor(sf::Color color) {
-	this->shape.setFillColor(color);
-}
+//sf::Color(204, 77, 5)
 
-Particle::Particle() : shape(2.f), gen(rd()), disX(0, 1500), disY(0, 900) {
+Particle::Particle(sf::Color color) : shape(2.f), gen(rd()), disX(0, 1500), disY(0, 900), color(color) {
 	this->radiusValue = 10.f;
-	this->shape.setFillColor(sf::Color(204, 77, 5));
+	this->shape.setFillColor(color);
 	this->shape.setOrigin(radiusValue, radiusValue);
-	this->shape.setPosition(disX(gen), disY(gen));
+	this->shape.setPosition(disX(gen), disY(gen));	
 }
 
 void Particle::setPosition(float x, float y) {

@@ -17,7 +17,10 @@ private:
 
 	bool isRunning;
 	bool start;
-	int particlesAmount;
+
+	sf::Color colors[4];
+	int particlesAmounts[4];
+
 	std::vector<Particle*> particlesVector;
 
 	void windowUpdateAndDisplay();
