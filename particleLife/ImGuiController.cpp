@@ -1,7 +1,11 @@
 #include "ImGuiController.h"
 
-void ImGuiController::Settings() {
+void ImGuiController::Settings(int* particlesAmount, bool& start) {
 	ImGui::Begin("Settings");
+	ImGui::SliderInt("Particles amount", particlesAmount, 1, 1000);
+	if (ImGui::Button("Start simulation"))
+		start = true;
+
 	ImGui::End();
 }
 
@@ -24,7 +28,7 @@ void ImGuiController::update(sf::RenderWindow& window) {
 	ImGui::SFML::Update(window, this->deltaClock.restart());
 }
 
-void ImGuiController::render(sf::RenderWindow& window) {
-	this->Settings();
+void ImGuiController::render(sf::RenderWindow& window, int* particlesAmount, bool&start) {
+	this->Settings(particlesAmount, start);
 	ImGui::SFML::Render(window);
 }

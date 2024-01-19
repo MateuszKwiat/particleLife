@@ -1,14 +1,11 @@
 #include "App.h"
 
-App::App() : isRunning(true), ImGuiController() {
+App::App() : isRunning(true), particlesAmount(100), start(false), ImGuiController() {
 	this->videMode = sf::VideoMode(1500, 900);
 	this->window = new sf::RenderWindow(this->videMode, "Particle Life");
 	this->window->setFramerateLimit(60);
 
 	ImGuiController::initialize(*this->window);
-
-	for (int i = 0; i < 10; i++)
-		this->particlesVector.push_back(new Particle());
 }
 
 App::~App() {
@@ -22,9 +19,13 @@ void App::windowUpdateAndDisplay() {
 		this->window->draw(x->getShape());
 	
 	ImGuiController::update(*this->window);
-	ImGuiController::render(*this->window);
+	ImGuiController::render(*this->window, &this->particlesAmount, this->start);
 	
 	this->window->display();
+}
+
+void App::vectorInitialize() {
+
 }
 
 const bool App::running() const {
@@ -53,6 +54,18 @@ void App::pollEvents() {
 }
 
 void App::render() {
+	if (start) {
+		for (auto x : particlesVector) {
+			delete x;
+		}
+		particlesVector.clear();
+
+		for (int i = 0; i < particlesAmount; i++)
+			this->particlesVector.push_back(new Particle());
+
+		start = false;
+	}
+
 	this->pollEvents();
 	this->windowUpdateAndDisplay();
 }

@@ -16,9 +16,12 @@ private:
 	sf::Event event;
 
 	bool isRunning;
+	bool start;
+	int particlesAmount;
 	std::vector<Particle*> particlesVector;
 
 	void windowUpdateAndDisplay();
+	void vectorInitialize();
 
 public:
 	App();
