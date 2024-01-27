@@ -6,10 +6,11 @@
 
 #include "Particle.h"
 #include "ImGuiController.h"
+#include "ParticlesCalculations.h"
 
 #include <vector>
 
-class App : private ImGuiController {
+class App : private ImGuiController, private ParticlesCalculations {
 private:
 	sf::VideoMode videMode;
 	sf::RenderWindow* window;
@@ -25,6 +26,7 @@ private:
 
 	void windowUpdateAndDisplay();
 	void vectorInitialize();
+	void updateParticles();
 
 public:
 	App();

@@ -14,10 +14,10 @@ private:
 	std::uniform_real_distribution<> disX;
 	std::uniform_real_distribution<> disY;
 
-	sf::Color color;
+	int colorValue;
 
 public:
-	Particle(sf::Color color);
+	Particle(sf::Color color, int colorValue);
 	
 	void setPosition(float x, float y);
 	

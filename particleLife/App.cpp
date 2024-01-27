@@ -1,6 +1,6 @@
 #include "App.h"
 
-App::App() : isRunning(true), start(false), ImGuiController() {
+App::App() : isRunning(true), start(false), ImGuiController(), ParticlesCalculations() {
 	this->videMode = sf::VideoMode(1500, 900);
 	this->window = new sf::RenderWindow(this->videMode, "Particle Life");
 	this->window->setFramerateLimit(60);
@@ -21,6 +21,11 @@ App::~App() {
 	delete this->window;
 }
 
+void App::updateParticles() {
+	for (auto& particle : particlesVector)
+		particle->setPosition(/*TODO*/);
+}
+
 void App::windowUpdateAndDisplay() {
 	this->window->clear(sf::Color(18, 33, 43));
 	for (auto x : particlesVector)
@@ -33,7 +38,7 @@ void App::windowUpdateAndDisplay() {
 }
 
 void App::vectorInitialize() {
-
+	/*TODO*/
 }
 
 const bool App::running() const {
@@ -70,7 +75,7 @@ void App::render() {
 
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < particlesAmounts[i]; j++)
-				this->particlesVector.push_back(new Particle(colors[i]));
+				this->particlesVector.push_back(new Particle(colors[i], i));
 		}	
 
 		start = false;
