@@ -24,5 +24,6 @@ public:
 	sf::Vector2f const getPosition() const;
 	sf::CircleShape getShape();
 	float getRadius();
+	float getColorValue() { return colorValue; }
 };
 

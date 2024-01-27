@@ -1,6 +1,7 @@
 #include "App.h"
 
-App::App() : isRunning(true), start(false), ImGuiController(), ParticlesCalculations() {
+App::App() 
+	: isRunning(true), start(false), ImGuiController(), ParticlesCalculations(), velocityX(0), velocityY(0) {
 	this->videMode = sf::VideoMode(1500, 900);
 	this->window = new sf::RenderWindow(this->videMode, "Particle Life");
 	this->window->setFramerateLimit(60);
@@ -22,11 +23,40 @@ App::~App() {
 }
 
 void App::updateParticles() {
-	for (auto& particle : particlesVector)
-		particle->setPosition(/*TODO*/);
+	for (int i = 0; i < particlesVector.size(); i++) {
+		velocityX = 0;
+		velocityY = 0;
+
+		for (int j = 0; j < particlesVector.size(); j++) {
+			const float radiusX = particlesVector[i]->getPosition().x - particlesVector[j]->getPosition().x;
+			const float radiusY = particlesVector[i]->getPosition().y - particlesVector[j]->getPosition().y;
+			const float distance = ParticlesCalculations::distance(*particlesVector[i], 
+				*particlesVector[j], this->window);
+		
+			if (distance > 0 && distance < ParticlesCalculations::getMaxRadius()) {
+				const float f = ParticlesCalculations::forceFunction(distance / ParticlesCalculations::getMaxRadius(),
+					particlesVector[i]->getColorValue(), particlesVector[j]->getColorValue());
+				velocityX += (radiusX / distance) * f;
+				velocityY += (radiusY / distance) * f;
+			}
+		}
+		
+		velocityX *= ParticlesCalculations::getMaxRadius();
+		velocityY *= ParticlesCalculations::getMaxRadius();
+	
+		
+		
+		particlesVector[i]->setPosition(particlesVector[i]->getPosition().x
+			 * ParticlesCalculations::getFrictionFactor() + velocityX * ParticlesCalculations::getDt(),
+			particlesVector[i]->getPosition().y * ParticlesCalculations::getFrictionFactor()
+			+ velocityY * ParticlesCalculations::getDt());
+	}
+
+
 }
 
 void App::windowUpdateAndDisplay() {
+	this->updateParticles();
 	this->window->clear(sf::Color(18, 33, 43));
 	for (auto x : particlesVector)
 		this->window->draw(x->getShape());

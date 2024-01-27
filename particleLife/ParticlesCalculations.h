@@ -12,6 +12,8 @@ private:
     const float dt;
     const float maxRadius;
     const float frictionHalfLife;
+    const float frictionFactor;
+    const float beta;
 
     float xDist;
     float yDist;
@@ -23,6 +25,10 @@ private:
 public:
     ParticlesCalculations();
     float calcDistance(float xDistance, float yDistance);
-    float distance(sf::CircleShape&& circ1, sf::CircleShape&& circ2, sf::Window* window);
+    float distance(const Particle& particle1, const Particle& particle2, sf::Window* window);
+    float forceFunction(float radius, int i, int j);
+    float getDt() { return dt; }
+    float getMaxRadius() { return maxRadius; }
+    float getFrictionFactor() { return frictionFactor; }
 };
 
