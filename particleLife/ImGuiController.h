@@ -9,7 +9,7 @@ private:
 	sf::Clock deltaClock;
 
 	void Settings(int* particlesAmounts, float* beta, float* maxRadius, 
-		float* dt, float* forceFactor, bool& start);
+		float* dt, float* forceFactor, float** particlesAttraction, bool& start);
 
 public:
 	ImGuiController();
@@ -18,6 +18,6 @@ public:
 	void eventProcessing(sf::Event& event);
 	void update(sf::RenderWindow& window);
 	void render(sf::RenderWindow& window, int* particlesAmounts, float* beta, 
-		float* maxRadius, float* dt, float* forceFactor, bool& start);
+		float* maxRadius, float* dt, float* forceFactor, float** particlesAttraction, bool& start);
 };
 

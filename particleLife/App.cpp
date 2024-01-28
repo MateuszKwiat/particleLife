@@ -79,7 +79,7 @@ void App::windowUpdateAndDisplay() {
 	ImGuiController::update(*this->window);
 	ImGuiController::render(*this->window, this->particlesAmounts, ParticlesCalculations::getBetaPointer(), 
 		ParticlesCalculations::getMaxRadiusPointer(), ParticlesCalculations::getDTPointer(),
-		&forceFactor, this->start);
+		&forceFactor, ParticlesCalculations::getMatrixPointer(), this->start);
 	
 	this->window->display();
 }

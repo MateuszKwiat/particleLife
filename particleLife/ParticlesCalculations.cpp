@@ -3,9 +3,12 @@
 ParticlesCalculations::ParticlesCalculations() 
     : maxRadius(30.f) , gen(rd()), randFloat(-1, 1), dt(0.2),
     frictionHalfLife(0.04), beta(0.3), frictionFactor(pow(0.5, dt / frictionHalfLife)) {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++) {
+        this->particlesAtractionMatrix[i] = new float[4];
+
         for (int j = 0; j < 4; j++)
-            this->particlesAtractionMatrix[i][j] = randFloat(gen);
+            this->particlesAtractionMatrix[i][j] = 0;// randFloat(gen);
+    }
 }
 
 float ParticlesCalculations::calcDistance(float xDistance, float yDistance) {
