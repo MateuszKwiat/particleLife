@@ -16,6 +16,10 @@ private:
 	sf::RenderWindow* window;
 	sf::Event event;
 
+	std::random_device rd;
+	std::mt19937 gen;
+	std::uniform_real_distribution<> uniDist;
+
 	bool isRunning;
 	bool start;
 
@@ -25,6 +29,8 @@ private:
 	std::vector<Particle*> particlesVector;
 	std::vector<float> velocitiesX;
 	std::vector<float> velocitiesY;
+	std::vector<float> positionsX;
+	std::vector<float> positionsY;
 
 	float velocityX;
 	float velocityY;
@@ -32,6 +38,7 @@ private:
 
 	void windowUpdateAndDisplay();
 	void vectorInitialize();
+	void calcVelocityAndPosition();
 	void updateParticles();
 
 public:

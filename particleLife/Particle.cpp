@@ -7,7 +7,7 @@ Particle::Particle(sf::Color color, int colorValue) :
 	this->radiusValue = 10.f;
 	this->shape.setFillColor(color);
 	this->shape.setOrigin(radiusValue, radiusValue);
-	this->shape.setPosition(disX(gen), disY(gen));	
+	//this->shape.setPosition(disX(gen), disY(gen));	
 }
 
 void Particle::setPosition(float x, float y) {
