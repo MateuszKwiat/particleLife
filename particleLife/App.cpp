@@ -1,8 +1,9 @@
 #include "App.h"
 
 App::App() 
-	: isRunning(true), start(false), ImGuiController(), ParticlesCalculations(), velocityX(0), velocityY(0) {
-	this->videMode = sf::VideoMode(1500, 900);
+	: isRunning(true), start(false), ImGuiController(), ParticlesCalculations(), 
+	velocityX(0), velocityY(0), forceFactor(10) {
+	this->videMode = sf::VideoMode(1600, 900);
 	this->window = new sf::RenderWindow(this->videMode, "Particle Life");
 	this->window->setFramerateLimit(60);
 
@@ -37,23 +38,52 @@ void App::updateParticles() {
 				const float f = ParticlesCalculations::forceFunction(distance / ParticlesCalculations::getMaxRadius(),
 					particlesVector[i]->getColorValue(), particlesVector[j]->getColorValue());
 				velocityX += (radiusX / distance) * f;
-				velocityY += (radiusY / distance) * f;
+				velocityY += (radiusY / distance) *  f;
 			}
 		}
 		
-		velocityX *= ParticlesCalculations::getMaxRadius();
-		velocityY *= ParticlesCalculations::getMaxRadius();
+		velocityX *= ParticlesCalculations::getMaxRadius() * forceFactor;
+		velocityY *= ParticlesCalculations::getMaxRadius() * forceFactor;
+
+		velocitiesX[i] *= ParticlesCalculations::getFrictionFactor();
+		velocitiesY[i] *= ParticlesCalculations::getFrictionFactor();
 	
-		
-		
-		particlesVector[i]->setPosition(particlesVector[i]->getPosition().x
-			 * ParticlesCalculations::getFrictionFactor() + velocityX * ParticlesCalculations::getDt(),
-			particlesVector[i]->getPosition().y * ParticlesCalculations::getFrictionFactor()
-			+ velocityY * ParticlesCalculations::getDt());
+		velocitiesX[i] += velocityX * ParticlesCalculations::getDt();
+		velocitiesY[i] += velocityY * ParticlesCalculations::getDt();
 	}
 
+	for (int i = 0; i < particlesVector.size(); i++) {
+		particlesVector[i]->setPosition(particlesVector[i]->getPosition().x
+			+ velocitiesX[i] * ParticlesCalculations::getDt(),
+			particlesVector[i]->getPosition().y + velocitiesY[i] * ParticlesCalculations::getDt());
+
+		if (particlesVector[i]->getPosition().x > window->getSize().x)
+			particlesVector[i]->setPosition(0, particlesVector[i]->getPosition().y);
+		else if (particlesVector[i]->getPosition().x < 0)
+			particlesVector[i]->setPosition(window->getSize().x, particlesVector[i]->getPosition().y);
+
+		if (particlesVector[i]->getPosition().y > window->getSize().y)
+			particlesVector[i]->setPosition(particlesVector[i]->getPosition().x, 0);
+		else if (particlesVector[i]->getPosition().y < 0)
+			particlesVector[i]->setPosition(particlesVector[i]->getPosition().x, window->getSize().y);
+	}
 
 }
+
+/*
+for (auto& x : particlesVec) {
+			if (x.getPosition().x > window.getSize().x + halfOfCircleRadius)
+				x.setPosition(-halfOfCircleRadius, x.getPosition().y);
+			else if (x.getPosition().x < -halfOfCircleRadius)
+				x.setPosition(window.getSize().x + halfOfCircleRadius, x.getPosition().y);
+
+			if (x.getPosition().y > window.getSize().y + halfOfCircleRadius)
+				x.setPosition(x.getPosition().x, -halfOfCircleRadius);
+			else if (x.getPosition().y < -halfOfCircleRadius)
+				x.setPosition(x.getPosition().x, window.getSize().y + halfOfCircleRadius);
+
+		}
+*/
 
 void App::windowUpdateAndDisplay() {
 	this->updateParticles();
@@ -62,7 +92,9 @@ void App::windowUpdateAndDisplay() {
 		this->window->draw(x->getShape());
 	
 	ImGuiController::update(*this->window);
-	ImGuiController::render(*this->window, this->particlesAmounts, this->start);
+	ImGuiController::render(*this->window, this->particlesAmounts, ParticlesCalculations::getBetaPointer(), 
+		ParticlesCalculations::getMaxRadiusPointer(), ParticlesCalculations::getDTPointer(),
+		&forceFactor, this->start);
 	
 	this->window->display();
 }
@@ -104,8 +136,11 @@ void App::render() {
 		particlesVector.clear();
 
 		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < particlesAmounts[i]; j++)
+			for (int j = 0; j < particlesAmounts[i]; j++) {
 				this->particlesVector.push_back(new Particle(colors[i], i));
+				this->velocitiesX.push_back(0.f);
+				this->velocitiesY.push_back(0.f);
+			}
 		}	
 
 		start = false;

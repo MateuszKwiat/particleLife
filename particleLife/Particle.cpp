@@ -3,7 +3,7 @@
 //sf::Color(204, 77, 5)
 
 Particle::Particle(sf::Color color, int colorValue) : 
-	shape(2.f), gen(rd()), disX(0, 1500), disY(0, 900), colorValue(colorValue) {
+	shape(2.f), gen(rd()), disX(200, 900), disY(200, 700), colorValue(colorValue) {
 	this->radiusValue = 10.f;
 	this->shape.setFillColor(color);
 	this->shape.setOrigin(radiusValue, radiusValue);

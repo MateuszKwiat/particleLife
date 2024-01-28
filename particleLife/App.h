@@ -23,8 +23,12 @@ private:
 	int particlesAmounts[4];
 
 	std::vector<Particle*> particlesVector;
+	std::vector<float> velocitiesX;
+	std::vector<float> velocitiesY;
+
 	float velocityX;
 	float velocityY;
+	float forceFactor;
 
 	void windowUpdateAndDisplay();
 	void vectorInitialize();

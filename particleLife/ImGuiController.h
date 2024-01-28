@@ -8,7 +8,8 @@ class ImGuiController {
 private:
 	sf::Clock deltaClock;
 
-	void Settings(int* particlesAmounts, bool& start);
+	void Settings(int* particlesAmounts, float* beta, float* maxRadius, 
+		float* dt, float* forceFactor, bool& start);
 
 public:
 	ImGuiController();
@@ -16,6 +17,7 @@ public:
 	void initialize(sf::RenderWindow& window);
 	void eventProcessing(sf::Event& event);
 	void update(sf::RenderWindow& window);
-	void render(sf::RenderWindow& window, int* particlesAmounts, bool& start);
+	void render(sf::RenderWindow& window, int* particlesAmounts, float* beta, 
+		float* maxRadius, float* dt, float* forceFactor,bool& start);
 };
 

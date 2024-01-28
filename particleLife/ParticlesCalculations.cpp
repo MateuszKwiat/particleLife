@@ -1,7 +1,7 @@
 #include "ParticlesCalculations.h"
 
 ParticlesCalculations::ParticlesCalculations() 
-    : maxRadius(100.f) , gen(rd()), randFloat(-1, 1), dt(0.2),
+    : maxRadius(30.f) , gen(rd()), randFloat(-1, 1), dt(0.2),
     frictionHalfLife(0.04), beta(0.3), frictionFactor(pow(0.5, dt / frictionHalfLife)) {
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 4; j++)
@@ -40,7 +40,7 @@ float ParticlesCalculations::distance(const Particle& particle1, const Particle&
 
 float ParticlesCalculations::forceFunction(float radius, int i, int j) {
     if (radius < beta)
-        return (radius / beta) - 1;
+        return (radius / beta) + 1;
     else if (beta < radius && radius < 1) {
         const float attraction = particlesAtractionMatrix[i][j];
 

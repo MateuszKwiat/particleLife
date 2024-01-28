@@ -9,11 +9,11 @@ class ParticlesCalculations {
 private:
 	float particlesAtractionMatrix[4][4];
 
-    const float dt;
-    const float maxRadius;
+    float dt;
+    float maxRadius;
     const float frictionHalfLife;
     const float frictionFactor;
-    const float beta;
+    float beta;
 
     float xDist;
     float yDist;
@@ -30,5 +30,8 @@ public:
     float getDt() { return dt; }
     float getMaxRadius() { return maxRadius; }
     float getFrictionFactor() { return frictionFactor; }
+    float* getDTPointer() { return &dt; }
+    float* getBetaPointer() { return &beta; }
+    float* getMaxRadiusPointer() { return &maxRadius; }
 };
 
