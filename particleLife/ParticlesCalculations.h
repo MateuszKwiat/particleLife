@@ -4,10 +4,10 @@
 
 #include <cmath>
 #include <random>
+#include <array>
 
 class ParticlesCalculations {
 private:
-	float particlesAtractionMatrix[4][4];
 
     float dt;
     float maxRadius;
@@ -22,6 +22,9 @@ private:
     std::mt19937 gen;
     std::uniform_real_distribution<> randFloat;
 
+protected:
+	std::array<std::array<float, 4>, 4> particlesAtractionMatrix;
+
 public:
     ParticlesCalculations();
     float calcDistance(float xDistance, float yDistance);
@@ -33,5 +36,6 @@ public:
     float* getDTPointer() { return &dt; }
     float* getBetaPointer() { return &beta; }
     float* getMaxRadiusPointer() { return &maxRadius; }
+    //std::array<std::array<float, 4>, 4>* getMatrixPointer() { return &particlesAtractionMatrix; }
 };
 

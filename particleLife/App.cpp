@@ -70,21 +70,6 @@ void App::updateParticles() {
 
 }
 
-/*
-for (auto& x : particlesVec) {
-			if (x.getPosition().x > window.getSize().x + halfOfCircleRadius)
-				x.setPosition(-halfOfCircleRadius, x.getPosition().y);
-			else if (x.getPosition().x < -halfOfCircleRadius)
-				x.setPosition(window.getSize().x + halfOfCircleRadius, x.getPosition().y);
-
-			if (x.getPosition().y > window.getSize().y + halfOfCircleRadius)
-				x.setPosition(x.getPosition().x, -halfOfCircleRadius);
-			else if (x.getPosition().y < -halfOfCircleRadius)
-				x.setPosition(x.getPosition().x, window.getSize().y + halfOfCircleRadius);
-
-		}
-*/
-
 void App::windowUpdateAndDisplay() {
 	this->updateParticles();
 	this->window->clear(sf::Color(18, 33, 43));
