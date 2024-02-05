@@ -37,13 +37,13 @@ void App::calcVelocityAndPosition() {
 			if (distance > 0 && distance < ParticlesCalculations::getMaxRadius()) {
 				const float f = ParticlesCalculations::forceFunction(distance / ParticlesCalculations::getMaxRadius(),
 					particlesVector[i]->getColorValue(), particlesVector[j]->getColorValue());
-				velocityX += (radiusX / distance) * f;
-				velocityY += (radiusY / distance) *  f;
+				velocityX += (radiusX / distance) *f;
+				velocityY += (radiusY / distance) *f;
 			}
 		}
 		
-		velocityX *= ParticlesCalculations::getMaxRadius() * forceFactor;
-		velocityY *= ParticlesCalculations::getMaxRadius() * forceFactor;
+		velocityX *= ParticlesCalculations::getMaxRadius();// * forceFactor;
+		velocityY *= ParticlesCalculations::getMaxRadius();// * forceFactor;
 
 		velocitiesX[i] *= ParticlesCalculations::getFrictionFactor();
 		velocitiesY[i] *= ParticlesCalculations::getFrictionFactor();

@@ -2,7 +2,7 @@
 
 ParticlesCalculations::ParticlesCalculations() 
     : maxRadius(30.f) , gen(rd()), randFloat(-1, 1), dt(0.02),
-    frictionHalfLife(0.04), beta(0.3), frictionFactor(pow(0.5, dt / frictionHalfLife)) {
+    frictionHalfLife(0.4), beta(0.3), frictionFactor(pow(0.5, dt / frictionHalfLife)) {
     for (int i = 0; i < 4; i++) {
         this->particlesAtractionMatrix[i] = new float[4];
 
