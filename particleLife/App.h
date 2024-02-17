@@ -13,6 +13,8 @@
 class App : private ImGuiController, private ParticlesCalculations {
 private:
 	sf::VideoMode videMode;
+	float windowWidth;
+	float windowHeight;
 	sf::RenderWindow* window;
 	sf::Event event;
 

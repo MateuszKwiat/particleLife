@@ -1,9 +1,9 @@
 #include "App.h"
 
-App::App() 
-	: isRunning(true), start(false), ImGuiController(), ParticlesCalculations(), 
-	velocityX(0), velocityY(0), forceFactor(10), gen(rd()) {
-	this->videMode = sf::VideoMode(1600, 900);
+App::App() : isRunning(true), start(false), ImGuiController(), ParticlesCalculations(), 
+	windowWidth(1600), windowHeight(900), velocityX(0), velocityY(0), forceFactor(10), gen(rd()) {
+	
+	this->videMode = sf::VideoMode(windowWidth, windowHeight);
 	this->window = new sf::RenderWindow(this->videMode, "Particle Life");
 	this->window->setFramerateLimit(60);
 
@@ -23,6 +23,7 @@ App::~App() {
 	delete this->window;
 }
 
+//**************************	TODO: FIX	**************************
 void App::calcVelocityAndPosition() {
 	for (int i = 0; i < particlesVector.size(); i++) {
 		velocityX = 0;
@@ -61,24 +62,24 @@ void App::calcVelocityAndPosition() {
 
 void App::updateParticles() {
 	for (int i = 0; i < particlesVector.size(); i++) {
-		particlesVector[i]->setPosition(positionsX[i] * window->getSize().x, positionsY[i] * window->getSize().y);
+		particlesVector[i]->setPosition(positionsX[i] * windowWidth, positionsY[i] * windowHeight);
 
-		if (particlesVector[i]->getPosition().x > window->getSize().x) {
-			particlesVector[i]->setPosition(0, positionsY[i] * window->getSize().y);
-			positionsX[i] = 0;
+		if (particlesVector[i]->getPosition().x > windowWidth) {
+			particlesVector[i]->setPosition(0.f, positionsY[i] * windowHeight);
+			positionsX[i] = 0.f;
 		}
-		else if (particlesVector[i]->getPosition().x < 0) {
-			particlesVector[i]->setPosition(window->getSize().x, positionsY[i] * window->getSize().y);
-			positionsX[i] = 1;
+		else if (particlesVector[i]->getPosition().x < 0.f) {
+			particlesVector[i]->setPosition(windowWidth, positionsY[i] * windowHeight);
+			positionsX[i] = 1.f;
 		}
 
-		if (particlesVector[i]->getPosition().y > window->getSize().y) {
-			particlesVector[i]->setPosition(positionsX[i] * window->getSize().x, 0);
-			positionsY[i] = 0;
+		if (particlesVector[i]->getPosition().y > windowHeight) {
+			particlesVector[i]->setPosition(positionsX[i] * windowWidth, 0.f);
+			positionsY[i] = 0.f;
 		}
-		else if (particlesVector[i]->getPosition().y < 0) {
-			particlesVector[i]->setPosition(positionsX[i] * window->getSize().x, window->getSize().y);
-			positionsY[i] = 1;
+		else if (particlesVector[i]->getPosition().y < 0.f) {
+			particlesVector[i]->setPosition(positionsX[i] * windowWidth, windowHeight);
+			positionsY[i] = 1.f;
 		}
 	}
 }
@@ -86,6 +87,7 @@ void App::updateParticles() {
 void App::windowUpdateAndDisplay() {
 	this->calcVelocityAndPosition();
 	this->updateParticles();
+
 	this->window->clear(sf::Color(18, 33, 43));
 	for (auto x : particlesVector)
 		this->window->draw(x->getShape());
