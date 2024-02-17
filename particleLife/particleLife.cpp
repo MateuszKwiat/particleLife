@@ -1,5 +1,6 @@
 #include "App.h"
-// for different settings of particles check if particles of type X can get faster (avg of all X)
+
+// **************************   TODO: make tests for all particles combinations    **************************
 
 int main() {
     App app;

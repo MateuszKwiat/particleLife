@@ -37,6 +37,10 @@ private:
 	float velocityX;
 	float velocityY;
 	float forceFactor;
+	float radiusX;
+	float radiusY;
+	float distance;
+	float functionOutput;
 
 	void windowUpdateAndDisplay();
 	void vectorInitialize();

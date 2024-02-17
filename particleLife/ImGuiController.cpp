@@ -1,6 +1,7 @@
 #include "ImGuiController.h"
 #include "ParticlesCalculations.h"
 
+//**************************	TODO: FIX	**************************
 void ImGuiController::Settings(int* particlesAmounts, float* beta,
 	float* maxRadius, float* dt, float* forceFactor, float** particlesAttraction, bool& start) {
 	ImGui::Begin("Settings");
@@ -64,6 +65,7 @@ void ImGuiController::update(sf::RenderWindow& window) {
 	ImGui::SFML::Update(window, this->deltaClock.restart());
 }
 
+//**************************	TODO: FIX	**************************
 void ImGuiController::render(sf::RenderWindow& window, int* particlesAmounts,
 	float* beta, float* maxRadius, float* dt, float* forceFactor, float** particlesAttraction, bool&start) {
 	this->Settings(particlesAmounts, beta, maxRadius, dt, forceFactor, particlesAttraction, start);

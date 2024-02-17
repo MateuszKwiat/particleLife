@@ -1,5 +1,6 @@
 #include "ParticlesCalculations.h"
 
+//**************************	TODO: FIX	**************************
 ParticlesCalculations::ParticlesCalculations() 
     : maxRadius(30.f) , gen(rd()), randFloat(-1, 1), dt(0.02),
     frictionHalfLife(0.4), beta(0.3), frictionFactor(pow(0.5, dt / frictionHalfLife)) {
@@ -11,16 +12,12 @@ ParticlesCalculations::ParticlesCalculations()
     }
 }
 
-float ParticlesCalculations::calcDistance(float xDistance, float yDistance) {
-    return std::sqrt(pow(xDistance, 2) + pow(yDistance, 2));
-}
-
+//**************************	TODO: FIX	**************************
 float ParticlesCalculations::distance(const Particle& particle1, const Particle& particle2, sf::Window* window) {
     this->xDist = abs(particle1.getPosition().x - particle2.getPosition().x);
     this->yDist = abs(particle1.getPosition().y - particle2.getPosition().y);
     
-    if (xDist < maxRadius && yDist < maxRadius)
-        return calcDistance(xDist, yDist);
+    return std::sqrt(pow(xDist, 2) + pow(yDist, 2));
 
     ////  X AXIS EDGES CASE
     //if (particle1.getPosition().x < maxRadius && particle2.getPosition().x > window->getSize().x - maxRadius) {
@@ -41,11 +38,12 @@ float ParticlesCalculations::distance(const Particle& particle1, const Particle&
     //return calcDistance(xDist, yDist);
 }
 
+//**************************	TODO: FIX	**************************
 float ParticlesCalculations::forceFunction(float radius, int i, int j) {
     if (radius < beta)
         return (radius / beta) - 1;
     else if (beta < radius && radius < 1) {
-        const float attraction = particlesAtractionMatrix[i][j];
+        attraction = particlesAtractionMatrix[i][j];
 
         return attraction * (1 - abs((2 * radius) - 1 - beta) / (1 - beta));
     }

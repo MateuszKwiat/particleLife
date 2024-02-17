@@ -2,17 +2,10 @@
 
 #include <SFML/Graphics.hpp>
 
-#include <random>
-
 class Particle {
 private:
 	sf::CircleShape shape;
 	float radiusValue;
-
-	std::random_device rd;
-	std::mt19937 gen;
-	std::uniform_real_distribution<> disX;
-	std::uniform_real_distribution<> disY;
 
 	int colorValue;
 

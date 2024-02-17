@@ -13,6 +13,7 @@ private:
     const float frictionFactor;
 	
     float* particlesAtractionMatrix[4];
+    float attraction;
     float dt;
     float maxRadius;
     float beta;
@@ -27,7 +28,6 @@ private:
 
 public:
     ParticlesCalculations();
-    float calcDistance(float xDistance, float yDistance);
     float distance(const Particle& particle1, const Particle& particle2, sf::Window* window);
     float forceFunction(float radius, int i, int j);
     float getDt() { return dt; }

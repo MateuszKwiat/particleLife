@@ -23,28 +23,27 @@ App::~App() {
 	delete this->window;
 }
 
-//**************************	TODO: FIX	**************************
 void App::calcVelocityAndPosition() {
 	for (int i = 0; i < particlesVector.size(); i++) {
 		velocityX = 0;
 		velocityY = 0;
 
 		for (int j = 0; j < particlesVector.size(); j++) {
-			const float radiusX = particlesVector[i]->getPosition().x - particlesVector[j]->getPosition().x;
-			const float radiusY = particlesVector[i]->getPosition().y - particlesVector[j]->getPosition().y;
-			const float distance = ParticlesCalculations::distance(*particlesVector[i], 
+			radiusX = particlesVector[i]->getPosition().x - particlesVector[j]->getPosition().x;
+			radiusY = particlesVector[i]->getPosition().y - particlesVector[j]->getPosition().y;
+			distance = ParticlesCalculations::distance(*particlesVector[i], 
 				*particlesVector[j], this->window);
 		
 			if (distance > 0 && distance < ParticlesCalculations::getMaxRadius()) {
-				const float f = ParticlesCalculations::forceFunction(distance / ParticlesCalculations::getMaxRadius(),
+				functionOutput = ParticlesCalculations::forceFunction(distance / ParticlesCalculations::getMaxRadius(),
 					particlesVector[i]->getColorValue(), particlesVector[j]->getColorValue());
-				velocityX += (radiusX / distance) *f;
-				velocityY += (radiusY / distance) *f;
+				velocityX += (radiusX / distance) * functionOutput;
+				velocityY += (radiusY / distance) * functionOutput;
 			}
 		}
 		
-		velocityX *= ParticlesCalculations::getMaxRadius();// * forceFactor;
-		velocityY *= ParticlesCalculations::getMaxRadius();// * forceFactor;
+		//velocityX *= ParticlesCalculations::getMaxRadius();// * forceFactor;
+		//velocityY *= ParticlesCalculations::getMaxRadius();// * forceFactor;
 
 		velocitiesX[i] *= ParticlesCalculations::getFrictionFactor();
 		velocitiesY[i] *= ParticlesCalculations::getFrictionFactor();
@@ -149,8 +148,8 @@ void App::render() {
 		for (int i = 0; i < particlesVector.size(); i++) {
 			this->positionsX.push_back(uniDist(gen));
 			this->positionsY.push_back(uniDist(gen));
-			this->particlesVector[i]->setPosition(positionsX[i] * window->getSize().x, 
-				positionsY[i] * window->getSize().y);
+			this->particlesVector[i]->setPosition(positionsX[i] * windowWidth, 
+				positionsY[i] * windowHeight);
 		}
 
 		start = false;
