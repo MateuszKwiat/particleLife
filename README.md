@@ -1,0 +1,2 @@
+<h1 align="center"> Particle Life Simulation </h1>
+A C++20 desktop application that simulates complex interactions and behaviours of particles. It aims to visualize how simple rules can lead to emergent, life-like patterns and motion.
