@@ -8,9 +8,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
-add_subdirectory(./src)
-add_subdirectory(./tests/)
 add_subdirectory(./external)
+add_subdirectory(./src)
+enable_testing()
+add_subdirectory(./tests)
 
 add_custom_target(run
     COMMAND ${CMAKE_CURRENT_BINARY_DIR}/src/app/particle_life_app
