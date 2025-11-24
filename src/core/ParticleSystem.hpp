@@ -1,3 +1,22 @@
+/////////////////////////////////////////////
+//
+// Class represents state of N particles.
+// Each particle can be represented with 
+// five values:
+// - (float, float)
+//   position on X and Y axis,
+//
+// - (float, float)
+//   vectors parallel to X and Y axis
+//   representing velocity,
+//
+// - (uint8_t)
+//   color which corresponds to visuals used
+//   for rendering particle and type/species 
+//   of particle. 
+//
+/////////////////////////////////////////////
+
 #pragma once
 
 #include <vector>
