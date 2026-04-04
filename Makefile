@@ -15,3 +15,6 @@ test:
 	cmake -S . -B $(BUIDL_DIR)
 	cmake --build $(BUIDL_DIR) --target unit_tests
 	cd $(BUIDL_DIR) && ctest --output-on-failure
+
+format:
+	@find src/ tests/ -name '*.hpp' -o -name '*.cpp' | xargs clang-format -i -style=file
