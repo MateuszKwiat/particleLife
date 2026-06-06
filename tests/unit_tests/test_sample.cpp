@@ -1,19 +1,16 @@
 #include <gtest/gtest.h>
+#include <particleLife/core/temp.h>
+#include <particleLife/render/temp1.h>
+#include <particleLife/ui/temp2.h>
 
-int add(int a, int b) {
-    return a + b;
+TEST(TempTest, Addition) {
+    EXPECT_EQ(addition(3, 2), 5);
 }
 
-int sub(int a, int b) {
-    return a - b;
-}
-
-TEST(MathTest, Addition) {
-    EXPECT_EQ(add(2, 3), 5);
-    EXPECT_NE(add(2, 2), 5);
-}
-
-TEST(MathTest, Subtraction) {
+TEST(TempTest, Sub) {
     EXPECT_EQ(sub(3, 2), 1);
-    EXPECT_EQ(sub(2, 2), 0);
+}
+
+TEST(TempTest, Prod) {
+    EXPECT_EQ(prod(3, 2), 6);
 }

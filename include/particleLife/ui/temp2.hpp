@@ -1,0 +1,1 @@
+float prod(float a, float b);
