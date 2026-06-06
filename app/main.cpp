@@ -1,25 +1,13 @@
 #include <iostream>
+#include <particleLife/core/temp.hpp>
+#include <particleLife/render/temp1.hpp>
+#include <particleLife/ui/temp2.hpp>
 
 int main() {
-    std::cout << "Hello World!\n";
-    std::cout << "Hello World!\n";
-    std::cout << "Hello World!\n";
-    std::cout << "Hello World!\n";
-    std::cout << "Hello World!\n";
-    std::cout << "Hello World!\n";
-    std::cout << "Hello World!\n";
-    std::cout << "Hello World!\n";
-    std::cout << "Hello World!\n";
-    std::cout << "Hello World!\n";
+    std::cout << "Main file\n";
+    std::cout << addition(3, 5) << std::endl;
+    std::cout << sub(3, 5) << std::endl;
+    std::cout << prod(3, 5) << std::endl;
     return 0;
 }
 
-/* TODO
- *   investigate CICD
- *   make CICD pipeline
- *   investigate valgrind
- *   investigate coverage tests
- *   add cov tests and valgrind to project
- *   create new cmake structure
- *   remake make commands
- */
