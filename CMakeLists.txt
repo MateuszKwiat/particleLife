@@ -1,19 +1,17 @@
-cmake_minimum_required(VERSION 3.28.3)
-project(particle_life LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.15...4.1)
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+project(
+    particleLife
+    VERSION 0.1
+    DESCRIPTION "Particle Life Simulator"
+    LANGUAGES CXX)
 
-# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+    include(GoogleTest)
+endif()
 
-add_subdirectory(./external)
-add_subdirectory(./src)
-enable_testing()
-add_subdirectory(./tests)
-
-add_custom_target(run
-    COMMAND ${CMAKE_CURRENT_BINARY_DIR}/src/app/particle_life_app
-    DEPENDS particle_life_app
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+# include(FetchContent)
+add_subdirectory(src)
+add_subdirectory(app)
