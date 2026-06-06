@@ -1,2 +1,4 @@
-add_subdirectory(./unit_tests)
-add_subdirectory(./integration_tests)
+add_executable(unit_tests test_sample.cpp)
+target_compile_features(unit_tests PRIVATE cxx_std_23)
+target_link_libraries(unit_tests PRIVATE core_library render_library ui_library gtest_main)
+gtest_discover_tests(unit_tests)
