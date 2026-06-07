@@ -1,0 +1,4 @@
+add_executable(particleLife main.cpp)
+target_compile_features(particleLife PRIVATE cxx_std_23)
+
+target_link_libraries(particleLife PRIVATE core_library render_library ui_library)
