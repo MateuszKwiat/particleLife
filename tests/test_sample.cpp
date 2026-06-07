@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
-#include <particleLife/core/temp.h>
-#include <particleLife/render/temp1.h>
-#include <particleLife/ui/temp2.h>
+#include <particleLife/core/temp.hpp>
+#include <particleLife/render/temp1.hpp>
+#include <particleLife/ui/temp2.hpp>
 
 TEST(TempTest, Addition) { EXPECT_EQ(addition(3, 2), 5); }
 
