@@ -1,4 +1,5 @@
 name: CI pipeline
+run-name: Run CI pipeline
 
 on: [push]
 
