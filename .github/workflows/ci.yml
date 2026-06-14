@@ -14,7 +14,7 @@ jobs:
         run: mkdir -p build
 
       - name: Prep
-        run: cmake -S . _B build
+        run: cmake -S . -B build
 
       - name: Build
         run: cmake --build build --target unit-tests
