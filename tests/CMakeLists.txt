@@ -1,4 +1,7 @@
 add_executable(unit_tests test_sample.cpp)
 target_compile_features(unit_tests PRIVATE cxx_std_23)
 target_link_libraries(unit_tests PRIVATE core_library render_library ui_library gtest_main)
+enable_clang_coverage(unit_tests)
 gtest_discover_tests(unit_tests)
+
+add_coverage_target()
