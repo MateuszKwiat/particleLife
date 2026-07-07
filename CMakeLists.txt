@@ -7,22 +7,28 @@ project(
     LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+if(PROJECT_IS_TOP_LEVEL)
+
     set(CMAKE_CXX_EXTENSIONS OFF)
 
     include(CTest)
     include(GoogleTest)
+
 endif()
 
 include(FetchContent)
+include(cmake_modules/Coverage.cmake)
 
 add_subdirectory(app)
 add_subdirectory(external)
 add_subdirectory(src)
 
-if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+if (PROJECT_IS_TOP_LEVEL AND BUILD_TESTING)
+
     enable_testing()
     add_subdirectory(tests)
+
 endif()

@@ -1,29 +1,33 @@
-BUIDL_DIR = build
-PROJ_NAME = particleLife
-EXECUTABLE_PATH = ${BUIDL_DIR}/app/${PROJ_NAME}
+BUILD_DIR := build
+COVERAGE_BUILD_DIR := build-coverage
+PROJ_NAME := particleLife
+EXECUTABLE_PATH := $(BUILD_DIR)/app/$(PROJ_NAME)
 
 prep:
-	@mkdir -p $(BUIDL_DIR)
-	cmake -S . -B $(BUIDL_DIR)
+	mkdir -p $(BUILD_DIR)
+	cmake -S . -B $(BUILD_DIR)
 
-run:
-	@make prep
-	cmake --build $(BUIDL_DIR)
-	./${EXECUTABLE_PATH}
+run: prep
+	cmake --build $(BUILD_DIR)
+	./$(EXECUTABLE_PATH)
 
-test:
-	@make prep
-	cmake --build $(BUIDL_DIR) --target unit_tests
-	cd $(BUIDL_DIR) && ctest --output-on-failure
+test: prep
+	cmake --build $(BUILD_DIR) --target unit_tests
+	cd $(BUILD_DIR) && ctest --output-on-failure
 
-all:
-	@make prep
-	cmake --build $(BUIDL_DIR) --target unit_tests particleLife
-	cd $(BUIDL_DIR) && ctest --output-on-failure
-	./${EXECUTABLE_PATH}
+cov:
+	mkdir -p $(COVERAGE_BUILD_DIR)
+	cmake -S . -B $(COVERAGE_BUILD_DIR) -DENABLE_COVERAGE=ON
+	cmake --build $(COVERAGE_BUILD_DIR) --target coverage
 
-cleanup:
-	@rm -rf build
+all: prep
+	cmake --build $(BUILD_DIR) --target unit_tests particleLife
+	cd $(BUILD_DIR) && ctest --output-on-failure
+	./$(EXECUTABLE_PATH)
+
+clean:
+	rm -rf $(BUILD_DIR)
+	rm -rf $(COVERAGE_BUILD_DIR)
 
 format:
-	@find src/ tests/ -name '*.hpp' -o -name '*.cpp' | xargs clang-format -i -style=file
+	find src/ tests/ -name '*.hpp' -o -name '*.cpp' | xargs clang-format -i -style=file
