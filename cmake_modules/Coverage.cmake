@@ -41,6 +41,9 @@ function(add_coverage_target)
             OUTPUT_STRIP_TRAILING_WHITESPACE
         )
 
+        set(COVERAGE_HTML_DIR coverage)
+        set(COVERAGE_JSON coverage-summary.json)
+
         add_custom_target(coverage
             COMMAND ${CMAKE_COMMAND} -E env
                 LLVM_PROFILE_FILE=coverage.profraw
@@ -57,7 +60,14 @@ function(add_coverage_target)
                 $<TARGET_FILE:unit_tests>
                 -instr-profile=coverage.profdata
                 -format=html
-                -output-dir=coverage
+                -output-dir=${COVERAGE_HTML_DIR}
+
+            COMMAND /bin/sh -c
+                "${LLVM_COV} export                 \
+                -summary-only                       \
+                $<TARGET_FILE:unit_tests>           \
+                -instr-profile=coverage.profdata    \
+                > ${COVERAGE_JSON}                  "
 
             DEPENDS unit_tests
 
